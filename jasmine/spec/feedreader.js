@@ -77,12 +77,12 @@ $(function() {
     });
     /* "Initial Entries" test suite */
     describe('Initial Entries', function() {
-        var entryLinks = document.getElementsByClassName('entry-link')
-        var randomPage = Math.floor(Math.random()*allFeeds.length);     //random page is selected among allFeeds
-        beforeEach(function(done){                                      //loadFeed(randomPage) runs async by use
-            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;         //of beforeEach and done
-            jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;                   //to prevent timeout default is increased
-            loadFeed(randomPage,function(){                             //in accordance with jasmine documentation
+        /* entry class length needs to be checked */
+        var entryClass = document.getElementsByClassName('entry')    
+        /* loadFeed function runs asynchronously so beforeEach and done usage is needed. */
+        beforeEach(function(done){                                                       
+            /* loadFeed function is completed before the test */
+            loadFeed(0,function(){                                      
                 done();
             })
         });       
@@ -90,15 +90,13 @@ $(function() {
          * and completes its work, there is at least a single .entry
          * element within the .feed container. It is asynchronous testing.
          */
-        it("have at least a single entry now", function(done) {      
-            expect(entryLinks.length).toBeGreaterThan(0);               //ensure that there is at least one entry
+        it("has at least a single entry now", function(done) {      
+            /* check if entry length is greater than 0 */
+            expect(entryClass.length).toBeGreaterThan(0);               
             done();
-        });
-        afterEach(function() {
-            jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;         //default timeout is reset as described in
-        });                                                             //jasmine documentation
+        });                                                             
     });
-    /* "New Feed Selection" test suite*/
+    /* "New Feed Selection" test suite */
     describe('New Feed Selection', function() {
         var container = document.querySelector('.header-title');        //check if loadFeed brings "CSS Tricks"
         beforeEach(function(done){                                      //random logic can also be used here with

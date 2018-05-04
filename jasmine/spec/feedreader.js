@@ -54,27 +54,25 @@ $(function() {
     describe('The menu', function() {
         /* The test ensures the menu element is hidden by default
          * hiding/showing of the menu element.
-         */
-        let menuDefaultPosition = parseInt($('.slide-menu').css('transform').split(',')[4]);
-        let menuWidth = parseInt($('.slide-menu').css('width'));
-        let netOutsidePosition = Math.abs(menuDefaultPosition)-menuWidth; 
-        const menuIcon = document.querySelector('.menu-icon-link');     
-        const bodyClassList = document.body.classList;                  
+         */                
         /* Hide/show is defined in 'menu-hidden' class */
+        
         it('is hidden by default', function() {
-            expect(menuDefaultPosition).toBeLessThan(0);                
-            expect(netOutsidePosition).not.toBeLessThan(32);            
+            /* Check if classList has 'menu-hidden' class by default */
+            expect(document.body.classList.value).toContain('menu-hidden');         
         }); 
          /* The test ensures the menu changes visibility when
           * the menu icon is clicked. This test has two expectations :
           * Ddoes the menu display when clicked and does it hide when clicked again.
           */   
-
+        /* menuIcon is defined to trigger click event for checking if menu is
+         * displayed and hidden */
+        const menuIcon = document.querySelector('.menu-icon-link'); 
         it('toggles visibility when clicked', function() {            
             menuIcon.click();                                           
-            expect(document.body.classList.value).toBe('');             
+            expect(document.body.classList.value).not.toContain('menu-hidden');             
             menuIcon.click();
-            expect(document.body.classList.value).toBe('menu-hidden');                 
+            expect(document.body.classList.value).toContain('menu-hidden');                 
         });  
     });
     /* "Initial Entries" test suite */

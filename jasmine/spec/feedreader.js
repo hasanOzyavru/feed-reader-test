@@ -31,8 +31,7 @@ $(function() {
                 if (typeof(allFeeds[i].url)==='string') {               
                     expect(allFeeds[i].url.length).not.toBe(0);         
                 }              
-            }
-            
+            }       
         });
         /* This test loops through each feed in the allFeeds object
          * and ensures it has a name defined and that the name is not empty.
@@ -46,17 +45,15 @@ $(function() {
                 if (typeof(allFeeds[i].name)==='string') {              
                     expect(allFeeds[i].name.length).not.toBe(0);        
                 }              
-            }
-            
+            }       
         });
     });
     /* "The menu" test suite */
     describe('The menu', function() {
         /* The test ensures the menu element is hidden by default
          * hiding/showing of the menu element.
-         */                
-        /* Hide/show is defined in 'menu-hidden' class */
-        
+         * Hide/show is defined in 'menu-hidden' class              
+         */    
         it('is hidden by default', function() {
             /* Check if classList has 'menu-hidden' class by default */
             expect(document.body.classList.value).toContain('menu-hidden');         
@@ -66,7 +63,8 @@ $(function() {
           * Ddoes the menu display when clicked and does it hide when clicked again.
           */   
         /* menuIcon is defined to trigger click event for checking if menu is
-         * displayed and hidden */
+         * displayed and hidden 
+         */
         const menuIcon = document.querySelector('.menu-icon-link'); 
         it('toggles visibility when clicked', function() {            
             menuIcon.click();                                           
@@ -78,14 +76,16 @@ $(function() {
     /* "Initial Entries" test suite */
     describe('Initial Entries', function() {
         /* entry class length needs to be checked */
-        var entryClass = document.getElementsByClassName('entry')    
+        var entryClass ;  
         /* loadFeed function runs asynchronously so beforeEach and done usage is needed. */
         beforeEach(function(done){                                                       
             /* loadFeed function is completed before the test */
-            loadFeed(0,function(){                                      
-                done();
+            loadFeed(0,function(){ 
+                entryClass = document.getElementsByClassName('entry');                                                  
+                done(); 
             })
-        });       
+            
+        });   
         /* The test ensures when the loadFeed function is called
          * and completes its work, there is at least a single .entry
          * element within the .feed container. It is asynchronous testing.
@@ -98,17 +98,27 @@ $(function() {
     });
     /* "New Feed Selection" test suite */
     describe('New Feed Selection', function() {
-        var container = document.querySelector('.header-title');        //check if loadFeed brings "CSS Tricks"
-        beforeEach(function(done){                                      //random logic can also be used here with
-            loadFeed(1,function(){                                      //not.toBE("Feeds") because this is the first
-                done();                                                 //page loaded if no further command given
-            })
+        var entryCurrent;
+        var entryNext;      
+        beforeEach(function(done){                                              
+            loadFeed(0,function(){
+                /* Get the current feed inner HTML 
+                 * Page load is asynchrous and handled with done
+                 */
+                entryCurrent = document.querySelector('.feed').innerHTML;
+                /* Load the second feed as a different feed to see if content changes */ 
+                loadFeed(1,function(){
+                    entryNext = document.querySelector('.feed').innerHTML;
+                    done();
+                })                                                                           
+            })           
         }); 
-        /* The test ensures when a new feed is loaded by the loadFeed
-         * function that the content actually changes. Asynchronous testing.
+        /* The test ensures when a new feed is loaded by the loadFeed function
+         * that the content actually changes.
          */
-        it("changes the content", function(done) {      
-            expect(container.innerText).toBe("CSS Tricks");
+        it("changes the content", function(done) {                   
+            /* Compare the two contents and they are expected not to be equal */
+            expect(entryCurrent).not.toEqual(entryNext);
             done();
         }); 
     });    
